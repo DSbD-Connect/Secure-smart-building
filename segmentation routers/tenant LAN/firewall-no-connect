@@ -1,0 +1,208 @@
+###############
+# zone config #
+###############
+
+config defaults
+	option syn_flood	1
+	option input		REJECT
+	option output		REJECT
+	option forward		REJECT
+
+config zone
+	option name		lan
+	list   network		'lan'
+	option input		REJECT
+	option output		REJECT
+	option forward		ACCEPT
+
+config zone
+	option name		wan
+	list   network		'wan'
+	list   network		'wan6'
+	option input		REJECT
+	option output		ACCEPT
+	option forward		REJECT
+	option masq		1
+	option mtu_fix		1
+
+
+###############################################
+# rules to configure forwarding between zones #
+###############################################
+
+config forwarding
+	option src		lan
+	option dest		wan
+	
+config redirect
+        option name		port-forward-for-tenant-access
+        option target		DNAT
+        option src		lan
+        option dest		wan
+        option src_dport	5000
+        option dest_ip		192.168.37.14
+        option dest_port	80
+
+config redirect                                                                                                                                                                         
+        option name             port-forward-for-hacked-device-access                                                                                                                   
+        option target           DNAT                                                                                                                                                    
+        option src              lan                                                                                                                                                     
+        option dest             wan                                                                                                                                                     
+        option src_dport        5001                                                                                                                                                    
+        option dest_ip          192.168.37.210                                                                                                                                          
+        option dest_port        80  
+
+
+########################################################
+# rules to allow easy maintenance access to the router #
+########################################################
+# these rules would not be present in a real system, but
+# they allow for more convenient config/maintenance access
+# allow-ssh-from-wan is needed to allow switching connect-mode on and off
+
+config rule
+	option name		allow-ssh-from-lan
+	option src		lan
+	option proto		tcp
+	option dest_port	22
+	option target		ACCEPT
+	option family		ipv4
+	
+config rule
+	option name		allow-ssh-from-wan
+	option src		wan
+	option proto		tcp
+	option dest_port	5055
+	option target		ACCEPT
+	option family		ipv4
+	
+config rule
+	option name		allow-http-from-lan
+	option src		lan
+	option proto		tcp
+	option dest_port	80
+	option target		ACCEPT
+	option family		ipv4
+
+
+#####################################
+# rules for dhcp and dns in the lan #
+#####################################
+
+config rule
+        option name		allow-DNS-server-from-lan
+        option src		lan
+        option dest_port	53
+        option target		ACCEPT
+        
+config rule
+        option name		allow-DNS-server-to-lan
+        option dest		lan
+        option src_port		53
+        option target		ACCEPT
+	
+config rule
+	option name		allow-DHCP-server-from-lan
+	option src 		lan
+	option proto		udp
+	option dest_port	67
+	option target		ACCEPT
+	option family		ipv4
+
+config rule
+	option name		allow-DHCP-server-to-lan
+	option dest		lan
+	option proto		udp
+	option src_port		67
+	option target		ACCEPT
+	option family		ipv4
+	
+config rule
+	option name		allow-DHCPv6-server-from-lan
+	option src 		lan
+	option proto		udp
+	option dest_port	547
+	option target		ACCEPT
+	option family		ipv6
+
+config rule
+	option name		allow-DHCPv6-server-to-lan
+	option dest		lan
+	option proto		udp
+	option src_port		547
+	option target		ACCEPT
+	option family		ipv6
+
+
+#########################################
+# rules to allow essential traffic into #
+# router from wan                       #
+#########################################
+	
+## rules below here copied verbatim from default firewall config file ##
+## (modulo renaming)                                                  ##
+
+config rule
+	option name		allow-DHCP-client-from-wan
+	option src		wan
+	option proto		udp
+	option dest_port	68
+	option target		ACCEPT
+	option family		ipv4
+
+config rule
+	option name		allow-ping-from-wan
+	option src		wan
+	option proto		icmp
+	option icmp_type	echo-request
+	option family		ipv4
+	option target		ACCEPT
+
+config rule
+	option name		allow-IGMP-from-wan
+	option src		wan
+	option proto		igmp
+	option family		ipv4
+	option target		ACCEPT
+
+config rule
+	option name		allow-DHCPv6-client-from-wan
+	option src		wan
+	option proto		udp
+	option dest_port	546
+	option family		ipv6
+	option target		ACCEPT
+
+config rule
+	option name		allow-MLD-from-wan
+	option src		wan
+	option proto		icmp
+	option src_ip		fe80::/10
+	list icmp_type		'130/0'
+	list icmp_type		'131/0'
+	list icmp_type		'132/0'
+	list icmp_type		'143/0'
+	option family		ipv6
+	option target		ACCEPT
+
+config rule
+	option name		allow-ICMPv6-from-wan
+	option src		wan
+	option proto		icmp
+	list icmp_type		echo-request
+	list icmp_type		echo-reply
+	list icmp_type		destination-unreachable
+	list icmp_type		packet-too-big
+	list icmp_type		time-exceeded
+	list icmp_type		bad-header
+	list icmp_type		unknown-header-type
+	list icmp_type		router-solicitation
+	list icmp_type		neighbour-solicitation
+	list icmp_type		router-advertisement
+	list icmp_type		neighbour-advertisement
+	option limit		1000/sec
+	option family		ipv6
+	option target		ACCEPT
+
+
+

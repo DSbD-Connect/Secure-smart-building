@@ -1,0 +1,6 @@
+charset_normalizer
+chardet
+requests==2.32.3
+MarkupSafe==2.1.5
+flask
+flask-cors

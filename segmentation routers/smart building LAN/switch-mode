@@ -1,0 +1,20 @@
+#!/bin/ash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 [on|off]"
+    exit
+fi
+
+case "$1" in
+    on)  service cyberhive-connect enable
+         service cyberhive-connect start
+         ln -sf /mnt/usb-storage/connect-switcher/firewall-connect /etc/config/firewall
+         reload_config
+         ;;
+    off) service cyberhive-connect stop
+         service cyberhive-connect disable
+         ln -sf /mnt/usb-storage/connect-switcher/firewall-no-connect /etc/config/firewall
+         reload_config
+         ;;
+    *)   echo "Usage: $0 [on|off]" ;;
+esac

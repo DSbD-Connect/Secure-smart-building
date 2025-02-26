@@ -1,0 +1,12 @@
+{
+    "person.tenant_1" : [
+        "flat_1"
+    ],
+    "person.tenant_2" : [
+        "flat_2"
+    ],
+    "person.manager" :[
+            "flat_1", "flat_2", "building"
+    ]
+
+}

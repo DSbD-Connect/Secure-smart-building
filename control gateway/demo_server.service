@@ -1,0 +1,14 @@
+[Unit]
+Description=demo_server
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=docker compose up
+Restart=always
+WorkingDirectory=/root/homeassistant-mw-modeswitch
+
+
+[Install]
+WantedBy=multi-user.target

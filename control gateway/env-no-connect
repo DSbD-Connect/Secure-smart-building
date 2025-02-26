@@ -1,0 +1,6 @@
+FLASK_ENV=production
+BUILDING_ACCESS_POINT=192.168.37.200
+TENANT_ACCESS_POINT_1=192.168.37.201
+TENANT_ACCESS_POINT_2=192.168.37.202
+HOMEASSISTANT_HOST=192.168.37.200:8123
+HOMEASSISTANT_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

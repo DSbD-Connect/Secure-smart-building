@@ -1,0 +1,15 @@
+#!/bin/bash
+
+case "$1" in
+    on)	 ssh root@192.168.37.200 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode on'
+         ssh root@192.168.37.201 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode on'
+         ssh root@192.168.37.202 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode on'
+         ssh root@192.168.37.14 'cd /root/homeassistant-mw-modeswitch && /root/homeassistant-mw-modeswitch/switch-mode on'
+         ;;
+    off) ssh root@192.168.37.200 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode off'
+         ssh root@192.168.37.201 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode off'
+         ssh root@192.168.37.202 -p 5055 '/mnt/usb-storage/connect-switcher/switch-mode off'
+         ssh root@192.168.37.14 'cd /root/homeassistant-mw-modeswitch && /root/homeassistant-mw-modeswitch/switch-mode off'
+         ;;
+esac
+

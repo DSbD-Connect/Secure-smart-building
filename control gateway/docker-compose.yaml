@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  client:
+    image: homeassistant-client
+    ports:
+      - "80:8888"
+    network_mode: "host"
+    
+  server:
+    image: homeassistant-server
+    privileged: true
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    environment:
+      - FLASK_ENV=${FLASK_ENV}
+      - HOMEASSISTANT_HOST=${HOMEASSISTANT_HOST}
+      - HOMEASSISTANT_TOKEN=${HOMEASSISTANT_TOKEN}
+    
+    network_mode: "host"
+   
+    
